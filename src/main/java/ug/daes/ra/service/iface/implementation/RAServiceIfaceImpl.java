@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ug.daes.DAESService;
 import ug.daes.Result;
 import ug.daes.ra.asserts.RAServiceAsserts;
+import ug.daes.ra.config.SecureUrlValidator;
 import ug.daes.ra.config.SentryClientExceptions;
 import ug.daes.ra.dto.*;
 import ug.daes.ra.dto.EmailReqDto;
@@ -132,6 +133,7 @@ public class RAServiceIfaceImpl implements RAServiceIface {
 	@Autowired
 	SentryClientExceptions sentryClientExceptions;
 
+		private static SecureUrlValidator secureUrlValidator;
 
 //	@Autowired
 //	VisitorCompleteDetailsRepository visitorCompleteDetailsRepository;
@@ -341,6 +343,8 @@ public class RAServiceIfaceImpl implements RAServiceIface {
 			requestEntity.setTransactionType(Constant.ISSUE_CERTIFICATE);
 			logger.info(CLASS + " issuecertificate() :: processRequest() :: requestBody. "
 					+ requestEntity.getPostRequest().getRequestBody());
+
+			secureUrlValidator.validate(baseUrl);
 			ResponseEntity<String> httpResponse = restTemplate.postForEntity(baseUrl, requestEntity, String.class);
 			logger.info(
 					CLASS + " issuecertificate() :: processRequest() :: native response. " + httpResponse.getBody());

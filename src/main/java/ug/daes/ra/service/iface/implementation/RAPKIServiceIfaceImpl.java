@@ -34,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ug.daes.ra.asserts.RAServiceAsserts;
+import ug.daes.ra.config.SecureUrlValidator;
 import ug.daes.ra.dto.ApiResponses;
 import ug.daes.ra.dto.LogModelDTO;
 import ug.daes.ra.request.entity.SetPinModelDto;
@@ -121,6 +122,8 @@ public class RAPKIServiceIfaceImpl implements RAPKIServiceIface {
 
 	/** The subscriber wrapped key. */
 	private static SubscriberWrappedKey subscriberWrappedKey;
+
+	private static SecureUrlValidator secureUrlValidator;
 
 	/** The rabbit MQ sender. */
 	@Autowired
@@ -463,7 +466,7 @@ public class RAPKIServiceIfaceImpl implements RAPKIServiceIface {
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 			String unlockAuthPinUrl = urlunlockedAuthResetPin + "/" + suid;
-
+			secureUrlValidator.validate(unlockAuthPinUrl);
 			res = restTemplate.exchange(unlockAuthPinUrl, HttpMethod.POST, requestEntity, ApiResponses.class);
 
 			logger.info(CLASS + " unlockedAuthResetPin() rest response urlunlockedAuthResetPin " + res);
